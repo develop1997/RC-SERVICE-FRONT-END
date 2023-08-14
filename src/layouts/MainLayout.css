@@ -1,0 +1,158 @@
+.structure {
+    display: grid;
+    height: calc(100vh);
+    gap: 0px;
+    grid-template-columns: 100%;
+    grid-template-rows: 120px calc(100% - 150px) 30px;
+}
+
+header {
+    grid-column: 1/2;
+    grid-row: 1/1;
+    height: 120px;
+    font-family: "Permanent Marker";
+    text-shadow: 0px 0px 22px #686868;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    font-size: 40px;
+    text-align: center;
+    font-weight: bold;
+    transform: rotate(1deg) translate(0px, -50px);
+    -webkit-transform: rotate(1deg) translate(0px, -50px);
+    -moz-transform: rotate(1deg) translate(0px, -50px);
+    box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.67);
+    -webkit-box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.67);
+    -moz-box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.67);
+    margin: 0px;
+    z-index: 2;
+}
+
+header a {
+    text-decoration: none;
+    color: #ffffff;
+    margin-top: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+}
+
+nav {
+    width: 0px;
+    background: #5e5e5e;
+    background: -webkit-linear-gradient(189deg, #5e5e5e 0%, #000000 100%);
+    background: linear-gradient(189deg, #5e5e5e 0%, #000000 100%);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    transform: translate(-200px, 0px);
+    -webkit-transform: translate(-200px, 0px);
+    -moz-transform: translate(-200px, 0px);
+    height: 100%;
+    transition: width 0.3s ease, transform 0.3s ease;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: radial-gradient(#e3e3e36e .9px, transparent .9px);
+    background-size: 10px 10px;
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1/2;
+    background-color: #000000;
+    z-index: 2;
+    color: #ffffff;
+}
+
+.links {
+    margin-top: 70px;
+}
+
+.menu-btn {
+    background-color: transparent;
+    border-radius: 40%;
+    background-image: url("../assets/menu.svg");
+    background-size: cover;
+    height: 30px;
+    width: 30px;
+    border-style: hidden;
+    position: absolute;
+    top: 75px;
+    left: 10px;
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    transition: transform 0.3s;
+}
+
+nav * {
+    display: none;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    transform: translate(0px, -120px);
+    -webkit-transform: translate(0px, -120px);
+    -moz-transform: translate(0px, -120px);
+}
+
+.structure.hovered nav {
+    width: 250px;
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.structure.hovered .menu-btn {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    transition: transform 0.3s ease;
+}
+
+.structure.hovered nav * {
+    display: block;
+}
+
+.login-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 14px;
+}
+
+.nav-button {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+ul,
+li {
+    width: 100%;
+}
+
+li {
+    border-top: 1px double #62626288;
+    border-bottom: 1px double #62626288;
+    padding: 10px 0px;
+}
+
+li:hover{
+    background-color: rgba(255, 255, 255, 0.26);
+}
