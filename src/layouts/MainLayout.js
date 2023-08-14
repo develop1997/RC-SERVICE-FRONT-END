@@ -49,7 +49,7 @@ const MainLayout = (props) => {
 					onClick={handclickMenu}
 					onMouseEnter={handleMenuHover}
 					onMouseLeave={handleMenuLeave}></button>
-				<Link to="/">test</Link>
+				<Link to="/">RC-SERVICE</Link>
 				{isLoggedIn ? (
 					<></>
 				) : (
