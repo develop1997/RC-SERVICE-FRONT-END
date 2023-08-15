@@ -5,6 +5,7 @@ import axios from "axios";
 import "./Register.css";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
+import Select from "react-select";
 import {
 	// eslint-disable-next-line no-unused-vars
 	obtenerDosValoresAleatorios,
@@ -22,6 +23,7 @@ function Register() {
 	const [pais, setPais] = useState("");
 	const [phone, setPhone] = useState("");
 	const [codigo, setCodigo] = useState("");
+	console.log(pais);
 
 	const [codigoenviado, setCodigoEnviado] = useState("");
 	const [error, setError] = useState("");
@@ -114,7 +116,11 @@ function Register() {
 				params,
 			})
 			.then((response) => {
-				setCodigosTelefonicos(response.data);
+				const renamedData = response.data.map((item) => ({
+					label: item.name,
+					value: item.callingCode,
+				}));
+				setCodigosTelefonicos(renamedData);
 			})
 			.catch((error) => {
 				console.error("Error:", error);
@@ -288,19 +294,16 @@ function Register() {
 							</div>
 							<div className="input-field">
 								<label htmlFor="country">Pais:</label>
-								<select
-									id="country"
-									onChange={(e) => setPais(e.target.value)}>
-									{codigosTelefonicos.map((pais) => {
-										return (
-											<option
-												value={pais.callingCode}
-												key={pais.callingCode}>
-												{pais.name}
-											</option>
-										);
-									})}
-								</select>
+
+								<Select
+									className="select"
+									options={codigosTelefonicos}
+									onChange={(selectedOption) =>
+										setPais(selectedOption.value)
+									}
+									placeholder="Selecciona una opción"
+									//   isSearchable={false} // Desactiva la búsqueda
+								/>
 							</div>
 							<div className="input-field">
 								<label htmlFor="phone">

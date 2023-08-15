@@ -88,22 +88,23 @@ label {
     color: #333;
 }
 
-input,
-select {
+input {
     color: #2b2b2b;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 input {
     width: calc(95% - 20px);
 }
 
-select {
+.select {
     width: 95%;
+    border: 1px solid #ccc;
 }
+
 
 input[type="checkbox"] {
     margin-top: 5px;

@@ -9,7 +9,9 @@ function IndexPage() {
 	}, []);
 	return (
 		<>
-			<MainLayout>test</MainLayout>
+			<MainLayout>
+				test
+			</MainLayout>
 		</>
 	);
 }
