@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import {
 	formatReadableDate,
+	// eslint-disable-next-line no-unused-vars
 	obtenerDosValoresAleatorios,
 } from "../utils/Functions";
 
@@ -46,12 +47,14 @@ function Login() {
 	useEffect(() => {
 		document.title = "Inicia sesión";
 
+		// eslint-disable-next-line no-unused-vars
 		const config = {
 			headers: {
 				apikey: process.env.REACT_APP_NEWS_API_KEY,
 			},
 		};
 
+		// eslint-disable-next-line no-unused-vars
 		const params = {
 			text: "inmuebles",
 			number: "100",
@@ -69,7 +72,7 @@ function Login() {
 			.catch((error) => {
 				console.error("Error:", error);
 			});
-			
+
 		// setNews([
 		// 	{
 		// 		id: 114445934,

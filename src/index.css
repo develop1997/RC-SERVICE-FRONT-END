@@ -88,12 +88,21 @@ label {
     color: #333;
 }
 
-input {
-    width: 90%;
+input,
+select {
+    color: #2b2b2b;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
+}
+
+input {
+    width: calc(95% - 20px);
+}
+
+select {
+    width: 95%;
 }
 
 input[type="checkbox"] {
@@ -146,8 +155,9 @@ input[type="checkbox"] {
 
 input[type="submit"] {
     width: fit-content;
-    padding: 0px 20px;
+    padding: 0px 30px;
     margin-top: 20px;
+    border-radius: 15px;
 }
 
 .input-field {
@@ -211,6 +221,7 @@ input[type="submit"] {
     background-color: rgba(255, 0, 0, 0.384);
     border-radius: 10px;
     text-align: center;
+    width: calc(95% - 20px);
     padding: 10px;
 }
 

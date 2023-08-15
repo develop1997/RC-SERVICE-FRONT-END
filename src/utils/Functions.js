@@ -37,3 +37,17 @@ export function obtenerDosValoresAleatorios(matriz) {
 
 	return [valorAleatorio1, valorAleatorio2];
 }
+
+export function verificarNumeroWhatsApp(numero) {
+    const numeroLimpio = numero.replace(/\s/g, '');
+    if (numeroLimpio.startsWith('+')) {
+        return false;
+    }
+    if (!/^\d+$/.test(numeroLimpio)) {
+        return false;
+    }
+    if (numeroLimpio.length < 8 || numeroLimpio.length > 15) {
+        return false;
+    }
+    return true;
+}
