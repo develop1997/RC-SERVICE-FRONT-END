@@ -23,7 +23,6 @@ function Register() {
 	const [pais, setPais] = useState("");
 	const [phone, setPhone] = useState("");
 	const [codigo, setCodigo] = useState("");
-	console.log(pais);
 
 	const [codigoenviado, setCodigoEnviado] = useState("");
 	const [error, setError] = useState("");
