@@ -22,7 +22,7 @@ const ModalQuestion = ({
 				<p>{message}</p>
 				<div className="button-container">
 					<button
-						className="modal-button reject-button page-button"
+						className="page-button modal-button reject-button"
 						onClick={onReject}>
 						{rejectText}
 					</button>

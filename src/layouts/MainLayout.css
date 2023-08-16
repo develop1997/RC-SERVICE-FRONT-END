@@ -11,7 +11,6 @@ header {
     grid-row: 1/1;
     height: 120px;
     font-family: "Permanent Marker";
-    text-shadow: 0px 0px 22px #686868;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,10 +29,17 @@ header {
 }
 
 header a {
+    transition: text-shadow 0.3s ease;
+    text-shadow: 0px 0px 10px #686868;
     text-decoration: none;
     color: #ffffff;
     margin-top: 40px;
 }
+
+header a:hover {
+    text-shadow: 0px 0px 25px #ffffff;
+}
+
 
 nav a {
     text-decoration: none;
@@ -135,6 +141,8 @@ nav * {
     right: 20px;
     top: 20px;
     font-size: 14px;
+    background-color: #ffffffe5;
+    color: #000000;
 }
 
 .nav-button {
@@ -159,6 +167,7 @@ li {
     border-bottom: 1px double #62626288;
     padding: 10px 0px;
     max-height: 30px;
+    transition: background 0.3s ease;
 }
 
 ul {
