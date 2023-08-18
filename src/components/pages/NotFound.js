@@ -1,9 +1,9 @@
 /** @format */
 
 import { useEffect } from "react";
-import image1 from "../assets/error-404-alert.png"; 
-import image2 from "../assets/error-404-art.png"; 
-import MainLayout from "../layouts/MainLayout";
+import image1 from "../../assets/error-404-alert.png"; 
+import image2 from "../../assets/error-404-art.png"; 
+import MainLayout from "../../layouts/MainLayout";
 
 const NotFound = () => {
 	useEffect(() => {

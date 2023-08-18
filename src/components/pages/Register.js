@@ -1,51 +1,88 @@
 /** @format */
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./Login.css";
-import { Link, useNavigate } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
+import "./Register.css";
+import { useNavigate } from "react-router-dom";
+import MainLayout from "../../layouts/MainLayout";
+import Select from "react-select";
 import {
-	formatReadableDate,
 	// eslint-disable-next-line no-unused-vars
 	obtenerDosValoresAleatorios,
-} from "../utils/Functions";
+	formatReadableDate,
+	isValidPassword,
+	randomSixDigitNumber,
+	verificarNumeroWhatsApp,
+} from "../../utils/Functions";
 
-function Login() {
+function Register() {
 	const [news, setNews] = useState([]);
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [pais, setPais] = useState("");
+	const [phone, setPhone] = useState("");
+	const [codigo, setCodigo] = useState("");
 
-	const [iniciando, setIniciando] = useState(false);
+	const [codigoenviado, setCodigoEnviado] = useState("");
 	const [error, setError] = useState("");
+	const [validando, setValidando] = useState(false);
+	const [enviandocodigo, setEnviando] = useState(false);
+	const [registrando, setRegistrando] = useState(false);
+	// eslint-disable-next-line no-unused-vars
+	const [codigosTelefonicos, setCodigosTelefonicos] = useState([]);
 
 	let navigate = useNavigate();
 
 	let api = process.env.REACT_APP_API_URL;
 
 	useEffect(() => {
-		if (iniciando) {
+		setEnviando(false);
+		setRegistrando(false);
+	}, [error]);
+
+	useEffect(() => {
+		if (enviandocodigo) {
+			let temp = randomSixDigitNumber();
+			console.log(pais + phone);
 			axios
-				.post(api + "/users/login", {
+				.post(api + "/send-message", {
+					phoneNumber: pais + phone,
+					message: "Tu codigo de verificacion es: " + temp,
+				})
+				.then((res) => {
+					setCodigoEnviado(temp);
+					setValidando(true);
+				})
+				.catch((e) => {
+					setError(e);
+				})
+				.finally(() => {
+					setError("");
+					setEnviando(false);
+				});
+		} else if (registrando) {
+			axios
+				.post(api + "/users", {
 					correo: email,
 					contraseña: password,
 				})
 				.then((res) => {
-					document.cookie = "sessionToken=" + email + ";path=/";
-					navigate("/");
+					navigate("/login");
 				})
 				.catch((e) => {
 					setError(e.response.data.error || e.response.data.message);
 				})
 				.finally(() => {
-					setIniciando(false);
+					setError("");
+					setRegistrando(false);
 				});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [iniciando]);
+	}, [enviandocodigo, registrando]);
 
 	useEffect(() => {
-		document.title = "Inicia sesión";
+		document.title = "Registro";
 
 		// eslint-disable-next-line no-unused-vars
 		const config = {
@@ -73,6 +110,19 @@ function Login() {
 		// 		console.error("Error:", error);
 		// 	});
 
+		axios
+			.get(api + "/countries/country-names-codes")
+			.then((response) => {
+				const renamedData = response.data.map((item) => ({
+					label: item.name,
+					value: item.callingCode,
+				}));
+				setCodigosTelefonicos(renamedData);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+
 		setNews([
 			{
 				id: 114445934,
@@ -97,60 +147,40 @@ function Login() {
 				source_country: "es",
 			},
 		]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (email !== "" && password !== "") {
-			setIniciando(true);
+		if (email === "" && password === "" && phone === "") {
+			setError("Los campos no pueden estar vacios.");
+			return;
+		}
+		if (!isValidPassword(password)) {
+			setError(
+				"La contraseña debe tener al menos 8 caracteres y contener al menos una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&)."
+			);
+			return;
+		}
+		if (!verificarNumeroWhatsApp(phone)) {
+			setError("ese no es un número válido para WhatsApp.");
+			return;
+		}
+		setEnviando(true);
+	};
+
+	const handleValidate = (e) => {
+		e.preventDefault();
+		if (codigoenviado === parseInt(codigo)) {
+			setRegistrando(true);
+		} else {
+			setError("Codigo incorrecto");
 		}
 	};
 
 	return (
 		<MainLayout>
-			<div className="login-form">
-				<section>
-					<form onSubmit={handleSubmit}>
-						{error !== "" ? (
-							<div className="input-field error">
-								<p>{error}</p>
-							</div>
-						) : (
-							<></>
-						)}
-						<h2>Inicia sesión</h2>
-						<div className="input-field">
-							<label htmlFor="correo">Correo:</label>
-							<input
-								type="text"
-								id="correo"
-								placeholder="example@example.com"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-							/>
-						</div>
-						<div className="input-field">
-							<label htmlFor="password">Contraseña:</label>
-							<input
-								type="password"
-								id="password"
-								placeholder="********"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-							/>
-						</div>
-						<p>
-							¿Todavia no tienes cuenta?{" "}
-							<Link to="/register">Registrate</Link>
-						</p>
-						{iniciando ? <div className="spinner"></div> : <></>}
-						<input
-							type="submit"
-							className="submit-btn page-button"
-							value="Enviar"
-						/>
-					</form>
-				</section>
+			<div className="register-form">
 				<div className="curious-data">
 					{news.map((neww) => {
 						return (
@@ -179,9 +209,137 @@ function Login() {
 						);
 					})}
 				</div>
+				<section>
+					{validando ? (
+						<form onSubmit={handleValidate}>
+							{error !== "" ? (
+								<div className="input-field">
+									<div className="error">
+										<p>{error}</p>
+									</div>
+								</div>
+							) : (
+								<></>
+							)}
+							<div className="input-field">
+								<button
+									className="page-button"
+									onClick={() => {
+										setError("");
+										setValidando(false);
+									}}>
+									Atras
+								</button>
+							</div>
+							<h2>Registrate</h2>
+							<div className="input-field">
+								<label htmlFor="codigo">
+									Ingresa el codigo enviado al WhatsApp:
+								</label>
+								<input
+									type="number"
+									id="codigo"
+									placeholder="xxxxxx"
+									value={codigo}
+									onChange={(e) => setCodigo(e.target.value)}
+								/>
+							</div>
+							{registrando ? (
+								<div className="spinner"></div>
+							) : (
+								<></>
+							)}
+							<input
+								type="submit"
+								className="submit-btn page-button"
+								value="Enviar"
+							/>
+						</form>
+					) : (
+						<form onSubmit={handleSubmit}>
+							{error !== "" ? (
+								<div className="input-field">
+									<div className="error">
+										<p>{error}</p>
+									</div>
+								</div>
+							) : (
+								<></>
+							)}
+							<h2>Registrate</h2>
+							<div className="input-field">
+								<label htmlFor="correo">Correo:</label>
+								<input
+									type="text"
+									id="correo"
+									placeholder="example@example.com"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+							</div>
+							<div className="input-field">
+								<label htmlFor="password">Contraseña:</label>
+								<input
+									type="password"
+									id="password"
+									placeholder="********"
+									value={password}
+									onChange={(e) =>
+										setPassword(e.target.value)
+									}
+								/>
+							</div>
+							<div className="input-field">
+								<label htmlFor="country">Pais:</label>
+
+								<Select
+									className="select"
+									options={codigosTelefonicos}
+									onChange={(selectedOption) =>
+										setPais(selectedOption.value)
+									}
+									theme={(theme) => ({
+										...theme,
+										borderRadius: 10,
+										colors: {
+											...theme.colors,
+											text: "black",
+											primary25: "#b3b3b380",
+											primary: "black",
+										},
+									})}
+									placeholder="Selecciona una opción"
+									//   isSearchable={false} // Desactiva la búsqueda
+								/>
+							</div>
+							<div className="input-field">
+								<label htmlFor="phone">
+									Teléfono (WhatsApp):
+								</label>
+								<input
+									type="text"
+									id="phone"
+									placeholder="xxxxxxxxxx"
+									value={phone}
+									onChange={(e) => setPhone(e.target.value)}
+								/>
+							</div>
+							{enviandocodigo ? (
+								<div className="spinner"></div>
+							) : (
+								<></>
+							)}
+							<input
+								type="submit"
+								className="submit-btn page-button"
+								value="Enviar"
+							/>
+						</form>
+					)}
+				</section>
 			</div>
 		</MainLayout>
 	);
 }
 
-export default Login;
+export default Register;

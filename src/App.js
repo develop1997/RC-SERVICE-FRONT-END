@@ -1,9 +1,9 @@
 /** @format */
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NotFound from "./components/NotFound";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import NotFound from "./components/pages/NotFound";
+import Login from "./components/pages/Login";
+import Register from "./components/pages/Register";
 import IndexPage from "./components/IndexPage";
 
 function App() {

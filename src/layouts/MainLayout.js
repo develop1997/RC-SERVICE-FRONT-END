@@ -6,11 +6,13 @@ import "./MainLayout.css";
 import ModalQuestion from "../components/ModalQuestion";
 import { useLocation } from "react-router-dom";
 import Modal from "../components/Modal";
+import { formatearCorreo } from "../utils/Functions";
 
 const MainLayout = (props) => {
 	const [isHovered, setIsHovered] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [closesesion, setClosesesion] = useState(false);
+	const [sesion, setsesion] = useState(undefined);
 	const navigate = useNavigate();
 	const location = useLocation();
 	let closeByButtonTimeout;
@@ -42,6 +44,9 @@ const MainLayout = (props) => {
 			.split("; ")
 			.find((row) => row.startsWith("sessionToken="));
 		setIsLoggedIn(sessionCookie !== undefined);
+		if (sessionCookie) {
+			setsesion(sessionCookie.split("=")[1]);
+		}
 	}, []);
 
 	const handleMenuHover = () => {
@@ -81,14 +86,25 @@ const MainLayout = (props) => {
 						onMouseLeave={handleMenuLeave}>
 						<ul>
 							{isLoggedIn ? (
-								<li className="links">
-									<button
-										className="nav-button"
-										onClick={logout}>
-										<span className="nav-icon"></span>
-										<span>Cerrar sesión</span>
-									</button>
-								</li>
+								<>
+									<li className="links">
+										<button
+											className="nav-button"
+											onClick={logout}>
+											<span className="nav-icon log-out"></span>
+											<span>Cerrar sesión</span>
+										</button>
+									</li>
+									<li className="links">
+										<button
+											className="nav-button"
+											// onClick={logout}
+										>
+											<span className="nav-icon profile"></span>
+											<span>{formatearCorreo(sesion)}</span>
+										</button>
+									</li>
+								</>
 							) : (
 								<></>
 							)}

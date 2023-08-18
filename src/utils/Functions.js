@@ -39,15 +39,25 @@ export function obtenerDosValoresAleatorios(matriz) {
 }
 
 export function verificarNumeroWhatsApp(numero) {
-    const numeroLimpio = numero.replace(/\s/g, '');
-    if (numeroLimpio.startsWith('+')) {
-        return false;
-    }
-    if (!/^\d+$/.test(numeroLimpio)) {
-        return false;
-    }
-    if (numeroLimpio.length < 8 || numeroLimpio.length > 15) {
-        return false;
-    }
-    return true;
+	const numeroLimpio = numero.replace(/\s/g, "");
+	if (numeroLimpio.startsWith("+")) {
+		return false;
+	}
+	if (!/^\d+$/.test(numeroLimpio)) {
+		return false;
+	}
+	if (numeroLimpio.length < 8 || numeroLimpio.length > 15) {
+		return false;
+	}
+	return true;
+}
+
+export function formatearCorreo(correo) {
+	var correoFormateado;
+	if (correo.length > 18) {
+		correoFormateado = correo.substring(0, 18) + "...";
+	} else {
+		correoFormateado = correo;
+	}
+	return correoFormateado;
 }
