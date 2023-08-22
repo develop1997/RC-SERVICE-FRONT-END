@@ -1,15 +1,10 @@
 .structure {
-    display: grid;
-    height: calc(100vh);
-    gap: 0px;
-    grid-template-columns: 100%;
-    grid-template-rows: 120px calc(100% - 150px) 30px;
+    display: block;
+    height: 100%;
 }
-
 header {
-    grid-column: 1/2;
-    grid-row: 1/1;
-    height: 120px;
+    position: relative;
+    height: 110px;
     font-family: "Permanent Marker";
     display: flex;
     align-items: center;
@@ -18,14 +13,16 @@ header {
     font-size: 40px;
     text-align: center;
     font-weight: bold;
-    transform: rotate(1deg) translate(0px, -50px);
-    -webkit-transform: rotate(1deg) translate(0px, -50px);
-    -moz-transform: rotate(1deg) translate(0px, -50px);
+    transform: rotate(1deg);
+    -webkit-transform: rotate(1deg);
+    -moz-transform: rotate(1deg);
     box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.67);
     -webkit-box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.67);
     -moz-box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.67);
     margin: 0px;
-    z-index: 2;
+    margin-top: -40px;
+    padding-bottom: 5px;
+    z-index: 3;
 }
 
 header a {
@@ -33,7 +30,7 @@ header a {
     text-shadow: 0px 0px 15px #686868;
     text-decoration: none;
     color: #ffffff;
-    margin-top: 40px;
+    margin-top: 35px;
 }
 
 header a:hover {
@@ -58,8 +55,9 @@ nav {
     transform: translate(-200px, 0px);
     -webkit-transform: translate(-200px, 0px);
     -moz-transform: translate(-200px, 0px);
-    height: 100%;
+    height: auto;
     transition: width 0.3s ease, transform 0.3s ease;
+    z-index: 4;
 }
 
 main {
@@ -69,22 +67,24 @@ main {
     background-image: radial-gradient(#e3e3e36e .9px, transparent .9px);
     background-size: 10px 10px;
     background-color: #ffffff;
-    height: 100%;
+    min-height: calc(100vh - 145px);
     width: 100%;
+    z-index: 0;
 }
 
 footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    grid-column: 1/2;
     background-color: #000000;
-    z-index: 2;
+    z-index: 1;
     color: #ffffff;
+    height: 150px;
 }
 
+
 ul:not(.custom-ul):first-child {
-    margin-top: 70px;
+    margin-top: 105px;
 }
 
 .menu-btn {
@@ -96,7 +96,7 @@ ul:not(.custom-ul):first-child {
     width: 30px;
     border-style: hidden;
     position: absolute;
-    top: 75px;
+    top: 70px;
     left: 10px;
     transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
@@ -109,14 +109,14 @@ nav * {
 }
 
 .content {
+    width: 100vw;
     display: flex;
     flex-direction: row;
-    height: 100vh;
-    transform: translate(0px, -120px);
-    -webkit-transform: translate(0px, -120px);
-    -moz-transform: translate(0px, -120px);
-}
-
+    transform: translate(0px, -80px);
+    -webkit-transform: translate(0px, -80px);
+    -moz-transform: translate(0px, -80px);
+    margin-bottom: -80px;
+} 
 .structure.hovered nav {
     width: 250px;
     transform: translate(0px, 0px);
@@ -143,7 +143,7 @@ nav * {
     font-size: 14px;
     background-color: #ffffffe5;
     color: #000000;
-}
+} 
 
 .nav-button {
     background-color: transparent;
@@ -155,6 +155,7 @@ nav * {
     text-align: center;
     font-weight: 600;
     color: white;
+    transition: all 0.3s ease;
 }
 
 ul:not(.custom-ul),
@@ -176,6 +177,10 @@ ul:not(.custom-ul) {
 
 li:not(.custom-li):hover {
     background-color: #ffffff42;
+}
+
+.nav-button:hover{
+    padding-left: 20px;
 }
 
 .nav-icon {

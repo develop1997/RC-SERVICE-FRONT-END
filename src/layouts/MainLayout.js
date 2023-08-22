@@ -101,7 +101,9 @@ const MainLayout = (props) => {
 											// onClick={logout}
 										>
 											<span className="nav-icon profile"></span>
-											<span>{formatearCorreo(sesion)}</span>
+											<span>
+												{formatearCorreo(sesion)}
+											</span>
 										</button>
 									</li>
 								</>

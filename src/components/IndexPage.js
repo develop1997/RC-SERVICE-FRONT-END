@@ -5,6 +5,7 @@ import MainLayout from "../layouts/MainLayout";
 import axios from "axios";
 import { AdminIndex } from "./pages/admin/AdminIndex";
 import { UserIndex } from "./pages/user/UserIndex";
+import { getSesion } from "../utils/Functions";
 
 function IndexPage() {
 	const [sesion, setsesion] = useState(undefined);
@@ -15,12 +16,7 @@ function IndexPage() {
 	useEffect(() => {
 		document.title = "Inicio";
 		if (!sesion) {
-			const sessionCookie = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("sessionToken="));
-			if (sessionCookie) {
-				setsesion(sessionCookie.split("=")[1]);
-			}
+			setsesion(getSesion());
 		} else {
 			axios
 				.get(api + "/users/" + sesion)

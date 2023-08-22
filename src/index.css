@@ -8,13 +8,13 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 
-html {
+html,#root {
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .container {
@@ -23,7 +23,6 @@ html {
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -49,7 +48,7 @@ h6 {
     display: inline-block;
     padding: 2px 20px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 10px;
     transition: background-color 0.2s;
     font-family: 'Niramit', sans-serif;
 }

@@ -61,7 +61,6 @@ table {
     border-radius: 15px;
     width: 95%;
     border-collapse: collapse;
-    margin-top: 20px;
     margin-bottom: 30px;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(3px);
@@ -152,4 +151,36 @@ td:hover .menu-emergente {
 
 .custom-li{
     padding: 3px 0px;
+}
+
+.add-btn-container{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.add-btn{
+    background-color: black;
+    color: white;
+    border-color: transparent;
+    padding: 8px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover{
+    transform: scale(1.05);
+}
+
+.add-icon{
+    background-image: url("../../../assets/add-icon.svg");
+    height: 24px;
+    width: 24px;
+    background-position: center;
+    margin-right: 5px;
 }

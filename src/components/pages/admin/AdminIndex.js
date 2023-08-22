@@ -4,12 +4,30 @@ import { useEffect, useState } from "react";
 import "./AdminIndex.css";
 import MainLayout from "../../../layouts/MainLayout";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function AdminIndex() {
+	const navigate = useNavigate();
 	const [selectedTable, setSelectedTable] = useState("usuarios");
 	const [tabledata, settabledata] = useState([]);
 	const [editingRow, setEditingRow] = useState(null);
 	let api = process.env.REACT_APP_API_URL;
+
+	function handleAdd() {
+		switch (selectedTable) {
+			case "usuarios":
+				navigate("/add/user");
+				break;
+			case "roles":
+				navigate("/add/role");
+				break;
+			case "permisos":
+				navigate("/add/permision");
+				break;
+			default:
+				break;
+		}
+	}
 
 	const handleButtonClick = (table) => {
 		settabledata([]);
@@ -96,6 +114,14 @@ export function AdminIndex() {
 							</button>
 						</li>
 					</ul>
+					<div className="add-btn-container">
+						<button
+							className="add-btn page-button"
+							onClick={handleAdd}>
+							<span className="add-icon"> </span>
+							Añadir
+						</button>
+					</div>
 					<div className="table-scroll">
 						{selectedTable === "usuarios" && (
 							<table>

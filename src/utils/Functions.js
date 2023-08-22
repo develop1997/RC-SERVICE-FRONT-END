@@ -61,3 +61,13 @@ export function formatearCorreo(correo) {
 	}
 	return correoFormateado;
 }
+
+export function getSesion() {
+	const sessionCookie = document.cookie
+		.split("; ")
+		.find((row) => row.startsWith("sessionToken="));
+	if (sessionCookie) {
+		return sessionCookie.split("=")[1];
+	}
+	return undefined;
+}
