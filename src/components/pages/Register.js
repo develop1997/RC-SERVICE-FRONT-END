@@ -13,6 +13,7 @@ import {
 	isValidPassword,
 	randomSixDigitNumber,
 	verificarNumeroWhatsApp,
+	getSesion,
 } from "../../utils/Functions";
 
 function Register() {
@@ -33,6 +34,17 @@ function Register() {
 	const [codigosTelefonicos, setCodigosTelefonicos] = useState([]);
 
 	let navigate = useNavigate();
+
+	const [sesion, setsesion] = useState(undefined);
+
+	useEffect(() => {
+		setsesion(getSesion());
+		console.log(sesion);
+		if (sesion) {
+			navigate("/");
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sesion]);
 
 	let api = process.env.REACT_APP_API_URL;
 

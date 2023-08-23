@@ -128,7 +128,7 @@ export function AdminAddResource() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sesion]);
 
-	if (!sesion) {
+	if (!sesion || rol === "") {
 		return (
 			<MainLayout>
 				<div className="spinner"></div>

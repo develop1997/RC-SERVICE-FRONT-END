@@ -54,8 +54,8 @@ export function verificarNumeroWhatsApp(numero) {
 
 export function formatearCorreo(correo) {
 	var correoFormateado;
-	if (correo.length > 18) {
-		correoFormateado = correo.substring(0, 18) + "...";
+	if (correo.length > 15) {
+		correoFormateado = correo.substring(0, 15) + "...";
 	} else {
 		correoFormateado = correo;
 	}

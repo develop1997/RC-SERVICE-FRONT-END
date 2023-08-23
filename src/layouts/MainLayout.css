@@ -2,9 +2,10 @@
     display: block;
     height: 100%;
 }
+
 header {
     position: relative;
-    height: 110px;
+    height: 100px;
     font-family: "Permanent Marker";
     display: flex;
     align-items: center;
@@ -61,13 +62,14 @@ nav {
 }
 
 main {
+    padding-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-image: radial-gradient(#e3e3e36e .9px, transparent .9px);
     background-size: 10px 10px;
     background-color: #ffffff;
-    min-height: calc(100vh - 145px);
+    min-height: calc(100vh - 125px);
     width: 100%;
     z-index: 0;
 }
@@ -79,12 +81,12 @@ footer {
     background-color: #000000;
     z-index: 1;
     color: #ffffff;
-    height: 150px;
+    height: 110px;
 }
 
 
 ul:not(.custom-ul):first-child {
-    margin-top: 105px;
+    margin-top: 75px;
 }
 
 .menu-btn {
@@ -96,7 +98,7 @@ ul:not(.custom-ul):first-child {
     width: 30px;
     border-style: hidden;
     position: absolute;
-    top: 70px;
+    top: 65px;
     left: 10px;
     transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
@@ -116,7 +118,8 @@ nav * {
     -webkit-transform: translate(0px, -80px);
     -moz-transform: translate(0px, -80px);
     margin-bottom: -80px;
-} 
+}
+
 .structure.hovered nav {
     width: 250px;
     transform: translate(0px, 0px);
@@ -143,7 +146,7 @@ nav * {
     font-size: 14px;
     background-color: #ffffffe5;
     color: #000000;
-} 
+}
 
 .nav-button {
     background-color: transparent;
@@ -179,7 +182,7 @@ li:not(.custom-li):hover {
     background-color: #ffffff42;
 }
 
-.nav-button:hover{
+.nav-button:hover {
     padding-left: 20px;
 }
 

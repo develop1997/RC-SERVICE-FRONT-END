@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import {
 	formatReadableDate,
+	getSesion,
 	// eslint-disable-next-line no-unused-vars
 	obtenerDosValoresAleatorios,
 } from "../../utils/Functions";
@@ -19,9 +20,20 @@ function Login() {
 	const [iniciando, setIniciando] = useState(false);
 	const [error, setError] = useState("");
 
+	const [sesion, setsesion] = useState(undefined);
+
 	let navigate = useNavigate();
 
 	let api = process.env.REACT_APP_API_URL;
+
+	useEffect(() => {
+		setsesion(getSesion());
+		console.log(sesion)
+		if (sesion) {
+			navigate("/");
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sesion]);
 
 	useEffect(() => {
 		if (iniciando) {
