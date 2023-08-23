@@ -28,7 +28,6 @@ function Login() {
 
 	useEffect(() => {
 		setsesion(getSesion());
-		console.log(sesion)
 		if (sesion) {
 			navigate("/");
 		}

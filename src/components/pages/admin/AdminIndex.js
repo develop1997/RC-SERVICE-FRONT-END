@@ -123,196 +123,223 @@ export function AdminIndex() {
 						</button>
 					</div>
 					<div className="table-scroll">
-						{selectedTable === "usuarios" && (
+						{tabledata.length > 0 ? (
 							<>
-								<table>
-									<thead>
-										<tr>
-											<th>Correo</th>
-											<th>Rol</th>
-											<th>Accion</th>
-										</tr>
-									</thead>
-									<tbody>
-										{tabledata.map((user) => {
-											return (
-												<tr key={user._id}>
-													<td>{user.correo}</td>
-													<td>
-														{user.rol.nombreRol}
-													</td>
-													<td>
-														<button
-															className="options-btn"
-															onClick={() =>
-																handleEditClick(
-																	"test"
-																)
-															}></button>
-														{editingRow ===
-															"test" && (
-															<div className="menu-emergente">
-																<ul className="custom-ul">
-																	<li className="custom-li">
-																		testing
-																	</li>
-																	<li className="custom-li">
-																		testing
-																	</li>
-																	<li className="custom-li">
-																		testing
-																	</li>
-																</ul>
-															</div>
-														)}
-													</td>
+								{selectedTable === "usuarios" && (
+									<>
+										<table>
+											<thead>
+												<tr>
+													<th>Correo</th>
+													<th>Rol</th>
+													<th>Accion</th>
 												</tr>
-											);
-										})}
-									</tbody>
-								</table>
-							</>
-						)}
-						{selectedTable === "roles" && (
-							<>
-								<table>
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Usuarios con el rol</th>
-											<th>Accion</th>
-										</tr>
-									</thead>
-									<tbody>
-										{tabledata.map((rol) => {
-											return (
-												<tr key={rol.rol._id}>
-													<td>{rol.rol.nombreRol}</td>
-													<td>
-														<ul className="custom-ul">
-															{rol.usuarios.map(
-																(dato) => {
-																	return (
-																		<>
-																			<li
-																				className="custom-li"
-																				key={
-																					dato.correo
-																				}>
-																				{
-																					dato.correo
-																				}
-																			</li>
-																		</>
-																	);
+											</thead>
+											<tbody>
+												{tabledata.map((user) => {
+													return (
+														<tr key={user._id}>
+															<td>
+																{user.correo}
+															</td>
+															<td>
+																{
+																	user.rol
+																		.nombreRol
 																}
-															)}
-														</ul>
-													</td>
-													<td>
-														<button
-															className="options-btn"
-															onClick={() =>
-																handleEditClick(
-																	"test"
-																)
-															}></button>
-														{editingRow ===
-															"test" && (
-															<div className="menu-emergente">
-																<ul className="custom-ul">
-																	<li className="custom-li">
-																		testing
-																	</li>
-																	<li className="custom-li">
-																		testing
-																	</li>
-																	<li className="custom-li">
-																		testing
-																	</li>
-																</ul>
-															</div>
-														)}
-													</td>
-												</tr>
-											);
-										})}
-									</tbody>
-								</table>
-							</>
-						)}
-						{selectedTable === "permisos" && (
-							<>
-								<table>
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Usuarios con el permiso</th>
-											<th>Accion</th>
-										</tr>
-									</thead>
-									<tbody>
-										{tabledata.map((permiso) => {
-											return (
-												<tr key={permiso.permiso._id}>
-													<td>
-														{
-															permiso.permiso
-																.permiso
-														}
-													</td>
-													<td>
-														<ul className="custom-ul">
-															{permiso.usuarios.map(
-																(dato) => {
-																	return (
-																		<>
-																			<li
-																				className="custom-li"
-																				key={
-																					dato.correo
-																				}>
-																				{
-																					dato.correo
-																				}
+															</td>
+															<td>
+																<button
+																	className="options-btn"
+																	onClick={() =>
+																		handleEditClick(
+																			"test"
+																		)
+																	}></button>
+																{editingRow ===
+																	"test" && (
+																	<div className="menu-emergente">
+																		<ul className="custom-ul">
+																			<li className="custom-li">
+																				testing
 																			</li>
-																		</>
-																	);
-																}
-															)}
-														</ul>
-													</td>
-													<td>
-														<button
-															className="options-btn"
-															onClick={() =>
-																handleEditClick(
-																	"test"
-																)
-															}></button>
-														{editingRow ===
-															"test" && (
-															<div className="menu-emergente">
-																<ul className="custom-ul">
-																	<li className="custom-li">
-																		testing
-																	</li>
-																	<li className="custom-li">
-																		testing
-																	</li>
-																	<li className="custom-li">
-																		testing
-																	</li>
-																</ul>
-															</div>
-														)}
-													</td>
+																			<li className="custom-li">
+																				testing
+																			</li>
+																			<li className="custom-li">
+																				testing
+																			</li>
+																		</ul>
+																	</div>
+																)}
+															</td>
+														</tr>
+													);
+												})}
+											</tbody>
+										</table>
+									</>
+								)}
+								{selectedTable === "roles" && (
+									<>
+										<table>
+											<thead>
+												<tr>
+													<th>Nombre</th>
+													<th>Usuarios con el rol</th>
+													<th>Accion</th>
 												</tr>
-											);
-										})}
-									</tbody>
-								</table>
+											</thead>
+											<tbody>
+												{tabledata.map((rol) => {
+													return (
+														<tr key={rol.rol._id}>
+															<td>
+																{
+																	rol.rol
+																		.nombreRol
+																}
+															</td>
+															<td>
+																<ul className="custom-ul">
+																	{rol.usuarios.map(
+																		(
+																			dato
+																		) => {
+																			return (
+																				<>
+																					<li
+																						className="custom-li"
+																						key={
+																							dato.correo
+																						}>
+																						{
+																							dato.correo
+																						}
+																					</li>
+																				</>
+																			);
+																		}
+																	)}
+																</ul>
+															</td>
+															<td>
+																<button
+																	className="options-btn"
+																	onClick={() =>
+																		handleEditClick(
+																			"test"
+																		)
+																	}></button>
+																{editingRow ===
+																	"test" && (
+																	<div className="menu-emergente">
+																		<ul className="custom-ul">
+																			<li className="custom-li">
+																				testing
+																			</li>
+																			<li className="custom-li">
+																				testing
+																			</li>
+																			<li className="custom-li">
+																				testing
+																			</li>
+																		</ul>
+																	</div>
+																)}
+															</td>
+														</tr>
+													);
+												})}
+											</tbody>
+										</table>
+									</>
+								)}
+								{selectedTable === "permisos" && (
+									<>
+										<table>
+											<thead>
+												<tr>
+													<th>Nombre</th>
+													<th>
+														Usuarios con el permiso
+													</th>
+													<th>Accion</th>
+												</tr>
+											</thead>
+											<tbody>
+												{tabledata.map((permiso) => {
+													return (
+														<tr
+															key={
+																permiso.permiso
+																	._id
+															}>
+															<td>
+																{
+																	permiso
+																		.permiso
+																		.permiso
+																}
+															</td>
+															<td>
+																<ul className="custom-ul">
+																	{permiso.usuarios.map(
+																		(
+																			dato
+																		) => {
+																			return (
+																				<>
+																					<li
+																						className="custom-li"
+																						key={
+																							dato.correo
+																						}>
+																						{
+																							dato.correo
+																						}
+																					</li>
+																				</>
+																			);
+																		}
+																	)}
+																</ul>
+															</td>
+															<td>
+																<button
+																	className="options-btn"
+																	onClick={() =>
+																		handleEditClick(
+																			"test"
+																		)
+																	}></button>
+																{editingRow ===
+																	"test" && (
+																	<div className="menu-emergente">
+																		<ul className="custom-ul">
+																			<li className="custom-li">
+																				testing
+																			</li>
+																			<li className="custom-li">
+																				testing
+																			</li>
+																			<li className="custom-li">
+																				testing
+																			</li>
+																		</ul>
+																	</div>
+																)}
+															</td>
+														</tr>
+													);
+												})}
+											</tbody>
+										</table>
+									</>
+								)}
 							</>
+						) : (
+							<div className="spinner"></div>
 						)}
 					</div>
 				</div>

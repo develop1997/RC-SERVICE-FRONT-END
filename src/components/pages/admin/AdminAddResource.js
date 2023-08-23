@@ -5,7 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Modal from "../../Modal";
 import MainLayout from "../../../layouts/MainLayout";
-import { getSesion } from "../../../utils/Functions";
+import {
+	getSesion,
+	isValidPassword,
+} from "../../../utils/Functions";
 import "./AdminAddResource.css";
 
 export function AdminAddResource() {
@@ -31,17 +34,29 @@ export function AdminAddResource() {
 		switch (resource) {
 			case "user":
 				if (formdata.email !== "" && formdata.password !== "") {
+					if (!isValidPassword(formdata.password)) {
+						setError(
+							"La contraseña debe tener al menos 8 caracteres y contener al menos una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&)."
+						);
+						return;
+					}
 					setIniciando(true);
+				} else {
+					setError("Los campos no pueden estar vacios.");
 				}
 				break;
 			case "role":
 				if (formdata.nombreRol !== "") {
 					setIniciando(true);
+				} else {
+					setError("Los campos no pueden estar vacios.");
 				}
 				break;
 			case "permision":
 				if (formdata.permiso !== "") {
 					setIniciando(true);
+				} else {
+					setError("Los campos no pueden estar vacios.");
 				}
 				break;
 			default:
