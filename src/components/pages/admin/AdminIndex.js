@@ -30,8 +30,10 @@ export function AdminIndex() {
 	}
 
 	const handleButtonClick = (table) => {
-		settabledata([]);
-		setSelectedTable(table);
+		if (selectedTable !== table) {
+			settabledata([]);
+			setSelectedTable(table);
+		}
 	};
 
 	const handleEditClick = (row) => {
@@ -123,7 +125,7 @@ export function AdminIndex() {
 						</button>
 					</div>
 					<div className="table-scroll">
-						{tabledata.length > 0 ? (
+						{tabledata && tabledata.length > 0 ? (
 							<>
 								{selectedTable === "usuarios" && (
 									<>
@@ -137,16 +139,20 @@ export function AdminIndex() {
 											</thead>
 											<tbody>
 												{tabledata.map((user) => {
+													if (!user) {
+														return null;
+													}
 													return (
 														<tr key={user._id}>
 															<td>
 																{user.correo}
 															</td>
 															<td>
-																{
-																	user.rol
-																		.nombreRol
-																}
+																{user.rol
+																	.nombreRol
+																	? user.rol
+																			.nombreRol
+																	: ""}
 															</td>
 															<td>
 																<button
@@ -187,18 +193,21 @@ export function AdminIndex() {
 												<tr>
 													<th>Nombre</th>
 													<th>Usuarios con el rol</th>
-													<th>Accion</th>
 												</tr>
 											</thead>
 											<tbody>
 												{tabledata.map((rol) => {
+													if (!rol.rol) {
+														return null;
+													}
 													return (
 														<tr key={rol.rol._id}>
 															<td>
-																{
-																	rol.rol
-																		.nombreRol
-																}
+																{rol.rol
+																	.nombreRol
+																	? rol.rol
+																			.nombreRol
+																	: ""}
 															</td>
 															<td>
 																<ul className="custom-ul">
@@ -223,31 +232,6 @@ export function AdminIndex() {
 																	)}
 																</ul>
 															</td>
-															<td>
-																<button
-																	className="options-btn"
-																	onClick={() =>
-																		handleEditClick(
-																			"test"
-																		)
-																	}></button>
-																{editingRow ===
-																	"test" && (
-																	<div className="menu-emergente">
-																		<ul className="custom-ul">
-																			<li className="custom-li">
-																				testing
-																			</li>
-																			<li className="custom-li">
-																				testing
-																			</li>
-																			<li className="custom-li">
-																				testing
-																			</li>
-																		</ul>
-																	</div>
-																)}
-															</td>
 														</tr>
 													);
 												})}
@@ -269,6 +253,9 @@ export function AdminIndex() {
 											</thead>
 											<tbody>
 												{tabledata.map((permiso) => {
+													if (!permiso.permiso) {
+														return null;
+													}
 													return (
 														<tr
 															key={
