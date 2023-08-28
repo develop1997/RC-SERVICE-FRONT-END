@@ -19,7 +19,7 @@ function IndexPage() {
 			setsesion(getSesion());
 		} else {
 			axios
-				.get(api + "/users/" + sesion)
+				.get(api + "/users/email/" + sesion)
 				.then((response) => {
 					setrol(response.data.rol.nombreRol);
 				})

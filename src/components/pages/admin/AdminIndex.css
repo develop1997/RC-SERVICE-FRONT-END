@@ -51,7 +51,7 @@ table .custom-ul {
 }
 
 .table-scroll {
-    max-height: 300px;
+    max-height: 400px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -141,17 +141,19 @@ tr:last-child td {
     border-bottom: transparent;
 }
 
+td:last-child {
+    position: relative;
+}
+
 
 .menu-emergente {
     position: absolute;
     right: 0;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 15px;
-    padding: 5px;
     box-shadow: 0 2px 4px #0000001a;
     display: none;
-    z-index: 3;
+    z-index: 5;
 }
 
 td:hover .menu-emergente {
@@ -165,6 +167,11 @@ td:hover .menu-emergente {
     background-color: transparent;
     border-color: transparent;
     background-position: center;
+    transition: all 0.3s ease;
+}
+
+.options-btn:hover {
+    transform: scale(1.2);
 }
 
 .custom-li {
@@ -200,5 +207,27 @@ td:hover .menu-emergente {
     height: 24px;
     width: 24px;
     background-position: center;
+    margin-right: 5px;
+}
+
+.pop-menu-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px;
+}
+
+
+.pop-menu-option:hover {
+    background-color: #9e9e9e;
+}
+
+.pop-menu-option img {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     margin-right: 5px;
 }

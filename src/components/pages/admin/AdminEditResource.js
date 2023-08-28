@@ -9,12 +9,10 @@ import { getSesion, isValidPassword } from "../../../utils/Functions";
 import "./AdminAddResource.css";
 import Select from "react-select";
 
-export function AdminAddResource() {
-	let { resource } = useParams();
+export function AdminEditResource() {
+	let { resource, id } = useParams();
 	const [rol, setrol] = useState("");
 	const [roles, setroles] = useState([]);
-	const [permisions, setpermisions] = useState([]);
-	const [selectedpermisions, setselectedpermisions] = useState([]);
 	let api = process.env.REACT_APP_API_URL;
 	const [sesion, setsesion] = useState(undefined);
 	let rolAdmin = process.env.REACT_APP_ADMIN_SESION_NAME;
@@ -74,9 +72,12 @@ export function AdminAddResource() {
 			switch (resource) {
 				case "user":
 					axios
-						.post(api + "/users/" + formdata.nombreRol, {
-							correo: formdata.email,
-							contraseña: formdata.password,
+						.put(api + "/users/" + id, {
+							data: {
+								correo: formdata.email,
+								contraseña: formdata.password,
+							},
+							rol: formdata.nombreRol,
 						})
 						.then((res) => {
 							navigate("/");
@@ -92,11 +93,10 @@ export function AdminAddResource() {
 					break;
 				case "role":
 					axios
-						.post(api + "/admin-rol/roles", {
+						.put(api + "/admin-rol/role/" + id, {
 							rol: {
 								nombreRol: formdata.nombreRol,
 							},
-							permisions: selectedpermisions,
 						})
 						.then((res) => {
 							navigate("/");
@@ -112,7 +112,7 @@ export function AdminAddResource() {
 					break;
 				case "permision":
 					axios
-						.post(api + "/admin-rol/permisos", {
+						.put(api + "/admin-rol/permision/" + id, {
 							permiso: formdata.permiso,
 						})
 						.then((res) => {
@@ -135,7 +135,7 @@ export function AdminAddResource() {
 	}, [iniciando]);
 
 	useEffect(() => {
-		document.title = "Añadir " + resource;
+		document.title = "Editar " + resource;
 		if (!sesion) {
 			setsesion(getSesion());
 		} else {
@@ -168,14 +168,52 @@ export function AdminAddResource() {
 	}, []);
 
 	useEffect(() => {
-		axios
-			.get(api + "/admin-rol/permisos")
-			.then((response) => {
-				setpermisions(response.data);
-			})
-			.catch((error) => {
-				console.error("Error:", error);
-			});
+		switch (resource) {
+			case "user":
+				axios
+					.get(api + "/users/id/" + id)
+					.then((response) => {
+						setformdata({
+							...formdata,
+							email: response.data.correo,
+							password: response.data.contraseña,
+							nombreRol: response.data.rol.nombreRol,
+						});
+					})
+					.catch((error) => {
+						console.error("Error:", error);
+					});
+				break;
+			case "role":
+				axios
+					.get(api + "/admin-rol/role/" + id)
+					.then((response) => {
+						setformdata({
+							...formdata,
+							nombreRol: response.data.nombreRol,
+						});
+					})
+					.catch((error) => {
+						console.error("Error:", error);
+					});
+				break;
+			case "permision":
+				axios
+					.get(api + "/admin-rol/permision/" + id)
+					.then((response) => {
+						setformdata({
+							...formdata,
+							permiso: response.data.permiso,
+						});
+					})
+					.catch((error) => {
+						console.error("Error:", error);
+					});
+				break;
+			default:
+				break;
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -203,7 +241,7 @@ export function AdminAddResource() {
 								) : (
 									<></>
 								)}
-								<h2>Añadir Usuario</h2>
+								<h2>Editar Usuario</h2>
 								<div className="input-field">
 									<label htmlFor="correo">Correo:</label>
 									<input
@@ -242,6 +280,10 @@ export function AdminAddResource() {
 									<Select
 										className="select"
 										options={roles}
+										value={{
+											value: formdata.nombreRol,
+											label: formdata.nombreRol,
+										}}
 										onChange={(selectedOption) =>
 											setformdata({
 												...formdata,
@@ -284,7 +326,7 @@ export function AdminAddResource() {
 								) : (
 									<></>
 								)}
-								<h2>Añadir Rol</h2>
+								<h2>Editar Rol</h2>
 								<div className="input-field">
 									<label htmlFor="role">
 										Nombre del Rol:
@@ -302,59 +344,6 @@ export function AdminAddResource() {
 										}
 									/>
 								</div>
-								<h3>
-									Selecciona los permisos que va a tener este
-									rol
-								</h3>
-								{permisions.map((permission) => {
-									const isChecked =
-										selectedpermisions.includes(
-											permission._id
-										);
-
-									const handlePermissionChange = (e) => {
-										if (isChecked) {
-											const updatedPermissions =
-												selectedpermisions.filter(
-													(id) =>
-														id !== permission._id
-												);
-											setselectedpermisions(
-												updatedPermissions
-											);
-										} else {
-											setselectedpermisions([
-												...selectedpermisions,
-												permission._id,
-											]);
-										}
-									};
-
-									return (
-										<div
-											className="checkbox-list-item"
-											key={permission._id}>
-											<label
-												htmlFor={
-													"permission" +
-													permission._id
-												}>
-												{permission.permiso}:
-											</label>
-											<input
-												type="checkbox"
-												id={
-													"permission" +
-													permission._id
-												}
-												checked={isChecked}
-												onChange={
-													handlePermissionChange
-												}
-											/>
-										</div>
-									);
-								})}
 								{iniciando ? (
 									<div className="spinner"></div>
 								) : (
@@ -377,7 +366,7 @@ export function AdminAddResource() {
 								) : (
 									<></>
 								)}
-								<h2>Añadir Permiso</h2>
+								<h2>Editar Permiso</h2>
 								<div className="input-field">
 									<label htmlFor="permiso">
 										Nombre del Permiso:

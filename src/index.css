@@ -12,7 +12,8 @@ body {
 }
 
 
-html,#root {
+html,
+#root {
     height: 100vh;
     overflow-x: hidden;
 }
@@ -186,13 +187,13 @@ input[type="submit"] {
     backdrop-filter: blur(2px);
     margin-right: 20px;
     width: 40%;
-    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+    transition: all 0.3s ease
 }
 
 .curious-data .card:hover {
-    background: #b3b3b380;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
+    background: #b3b3b380;
 }
 
 .curious-data .card p {
@@ -204,9 +205,8 @@ input[type="submit"] {
 }
 
 .curious-data .card img {
-    width: 129px;
-    height: 129px;
-    border-radius: 20px;
+    height: 125px;
+    border-radius: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
 }

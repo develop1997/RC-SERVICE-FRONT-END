@@ -23,6 +23,7 @@ Para configurar el proyecto, necesitas crear un archivo llamado `.env` en la ra√
 ```dotenv
 REACT_APP_API_URL=url del host del backend (ej. http://localhost:3345)
 REACT_APP_NEWS_API_KEY=api-key para el servicio de noticias
+REACT_APP_ADMIN_SESION_NAME=Admin
 ```
 
 ## Uso

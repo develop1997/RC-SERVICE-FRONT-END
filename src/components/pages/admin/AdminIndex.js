@@ -5,11 +5,15 @@ import "./AdminIndex.css";
 import MainLayout from "../../../layouts/MainLayout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import deleteIcn from "../../../assets/delete-icon.svg";
+import editIcn from "../../../assets/edit-icon.svg";
+import ModalQuestion from "../../ModalQuestion";
 
 export function AdminIndex() {
 	const navigate = useNavigate();
 	const [selectedTable, setSelectedTable] = useState("usuarios");
 	const [tabledata, settabledata] = useState([]);
+	const [decidiendo, setdecidiendo] = useState(undefined);
 	const [editingRow, setEditingRow] = useState(null);
 	let api = process.env.REACT_APP_API_URL;
 
@@ -44,7 +48,7 @@ export function AdminIndex() {
 		}
 	};
 
-	useEffect(() => {
+	function getData() {
 		if (selectedTable === "usuarios") {
 			axios
 				.get(api + "/users/")
@@ -76,8 +80,19 @@ export function AdminIndex() {
 					console.error("Error:", error);
 				});
 		}
+	}
+
+	useEffect(() => {
+		getData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedTable]);
+
+	useEffect(() => {
+		if (tabledata === undefined) {
+			getData();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [tabledata]);
 
 	return (
 		<>
@@ -159,21 +174,43 @@ export function AdminIndex() {
 																	className="options-btn"
 																	onClick={() =>
 																		handleEditClick(
-																			"test"
+																			user._id
 																		)
 																	}></button>
 																{editingRow ===
-																	"test" && (
+																	user._id && (
 																	<div className="menu-emergente">
-																		<ul className="custom-ul">
-																			<li className="custom-li">
-																				testing
+																		<ul className="custom-ul pop-menu">
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					setdecidiendo(
+																						user._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						deleteIcn
+																					}
+																					alt="x"
+																				/>
+																				Eliminar
 																			</li>
-																			<li className="custom-li">
-																				testing
-																			</li>
-																			<li className="custom-li">
-																				testing
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					navigate(
+																						"/edit/user/" +
+																							user._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						editIcn
+																					}
+																					alt="x"
+																				/>
+																				Editar
 																			</li>
 																		</ul>
 																	</div>
@@ -193,6 +230,7 @@ export function AdminIndex() {
 												<tr>
 													<th>Nombre</th>
 													<th>Usuarios con el rol</th>
+													<th>Accion</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -231,6 +269,60 @@ export function AdminIndex() {
 																		}
 																	)}
 																</ul>
+															</td>
+															<td>
+																<button
+																	className="options-btn"
+																	onClick={() =>
+																		handleEditClick(
+																			rol
+																				.rol
+																				._id
+																		)
+																	}></button>
+																{editingRow ===
+																	rol.rol
+																		._id && (
+																	<div className="menu-emergente">
+																		<ul className="custom-ul pop-menu">
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					setdecidiendo(
+																						rol
+																							.rol
+																							._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						deleteIcn
+																					}
+																					alt="x"
+																				/>
+																				Eliminar
+																			</li>
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					navigate(
+																						"/edit/role/" +
+																							rol
+																								.rol
+																								._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						editIcn
+																					}
+																					alt="x"
+																				/>
+																				Editar
+																			</li>
+																		</ul>
+																	</div>
+																)}
 															</td>
 														</tr>
 													);
@@ -297,21 +389,51 @@ export function AdminIndex() {
 																	className="options-btn"
 																	onClick={() =>
 																		handleEditClick(
-																			"test"
+																			permiso
+																				.permiso
+																				._id
 																		)
 																	}></button>
 																{editingRow ===
-																	"test" && (
+																	permiso
+																		.permiso
+																		._id && (
 																	<div className="menu-emergente">
-																		<ul className="custom-ul">
-																			<li className="custom-li">
-																				testing
+																		<ul className="custom-ul pop-menu">
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					setdecidiendo(
+																						permiso
+																							.permiso
+																							._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						deleteIcn
+																					}
+																					alt="x"
+																				/>
+																				Eliminar
 																			</li>
-																			<li className="custom-li">
-																				testing
-																			</li>
-																			<li className="custom-li">
-																				testing
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					navigate(
+																						"/edit/permision/" +
+																							permiso
+																								.permiso
+																								._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						editIcn
+																					}
+																					alt="x"
+																				/>
+																				Editar
 																			</li>
 																		</ul>
 																	</div>
@@ -330,6 +452,53 @@ export function AdminIndex() {
 						)}
 					</div>
 				</div>
+				<ModalQuestion
+					acceptText={"Eliminar"}
+					isOpen={decidiendo !== undefined}
+					message={
+						"Estas seguro/a de que quieres eliminar al usuario?"
+					}
+					onAccept={() => {
+						if (selectedTable === "usuarios") {
+							axios
+								.delete(api + "/users/" + decidiendo)
+								.then((response) => {
+									handleEditClick(decidiendo);
+									settabledata(undefined);
+								})
+								.catch((error) => {
+									console.error("Error:", error);
+								});
+						} else if (selectedTable === "roles") {
+							axios
+								.delete(api + "/admin-rol/role/" + decidiendo)
+								.then((response) => {
+									handleEditClick(decidiendo);
+									settabledata(undefined);
+								})
+								.catch((error) => {
+									console.error("Error:", error);
+								});
+						} else if (selectedTable === "permisos") {
+							axios
+								.delete(
+									api + "/admin-rol/permiso/" + decidiendo
+								)
+								.then((response) => {
+									handleEditClick(decidiendo);
+									settabledata(undefined);
+								})
+								.catch((error) => {
+									console.error("Error:", error);
+								});
+						}
+						setdecidiendo(undefined);
+					}}
+					onReject={() => {
+						setdecidiendo(undefined);
+					}}
+					rejectText={"Cancelar"}
+					title={"Eliminar Usuario"}></ModalQuestion>
 			</MainLayout>
 		</>
 	);
