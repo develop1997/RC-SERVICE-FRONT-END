@@ -7,6 +7,7 @@ import Register from "./components/pages/Register";
 import IndexPage from "./components/IndexPage";
 import { AdminAddResource } from "./components/pages/admin/AdminAddResource";
 import { AdminEditResource } from "./components/pages/admin/AdminEditResource";
+import { AdminGestionatePermisions } from "./components/pages/admin/AdminGestionatePermisions";
 
 function App() {
 	return (
@@ -21,6 +22,11 @@ function App() {
 				<Route
 					path="/edit/:resource/:id"
 					element={<AdminEditResource></AdminEditResource>}></Route>
+				<Route
+					path="/gestionate/permision/:id"
+					element={
+						<AdminGestionatePermisions></AdminGestionatePermisions>
+					}></Route>
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>

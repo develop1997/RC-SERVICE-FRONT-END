@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import deleteIcn from "../../../assets/delete-icon.svg";
 import editIcn from "../../../assets/edit-icon.svg";
+import gestionateIcn from "../../../assets/gestionate-icon.svg";
 import ModalQuestion from "../../ModalQuestion";
 
 export function AdminIndex() {
@@ -363,25 +364,12 @@ export function AdminIndex() {
 															</td>
 															<td>
 																<ul className="custom-ul">
-																	{permiso.usuarios.map(
-																		(
-																			dato
-																		) => {
-																			return (
-																				<>
-																					<li
-																						className="custom-li"
-																						key={
-																							dato.correo
-																						}>
-																						{
-																							dato.correo
-																						}
-																					</li>
-																				</>
-																			);
-																		}
-																	)}
+																	{
+																		permiso
+																			.usuarios
+																			.length
+																	}{" "}
+																	Usuarios
 																</ul>
 															</td>
 															<td>
@@ -434,6 +422,25 @@ export function AdminIndex() {
 																					alt="x"
 																				/>
 																				Editar
+																			</li>
+																			<li
+																				className="custom-li pop-menu-option"
+																				onClick={() => {
+																					navigate(
+																						"/gestionate/permision/" +
+																							permiso
+																								.permiso
+																								._id
+																					);
+																				}}>
+																				<img
+																					src={
+																						gestionateIcn
+																					}
+																					alt="x"
+																				/>
+																				Gestionar
+																				Permisos
 																			</li>
 																		</ul>
 																	</div>
