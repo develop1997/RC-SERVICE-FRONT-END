@@ -15,9 +15,11 @@ import {
 	verificarNumeroWhatsApp,
 	getSesion,
 } from "../../utils/Functions";
+import Modal from "../Modal";
 
 function Register() {
 	const [news, setNews] = useState([]);
+	const [exitoso, setexitoso] = useState(false);
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -56,7 +58,6 @@ function Register() {
 	useEffect(() => {
 		if (enviandocodigo) {
 			let temp = randomSixDigitNumber();
-			console.log(pais + phone);
 			axios
 				.post(api + "/send-message", {
 					phoneNumber: pais + phone,
@@ -80,7 +81,7 @@ function Register() {
 					contraseña: password,
 				})
 				.then((res) => {
-					navigate("/login");
+					setexitoso(true);
 				})
 				.catch((e) => {
 					setError(e.response.data.error || e.response.data.message);
@@ -350,6 +351,14 @@ function Register() {
 					)}
 				</section>
 			</div>
+			<Modal
+				isOpen={exitoso}
+				onClose={() => {
+					setexitoso(false);
+					navigate("/login");
+				}}
+				title="Procedimiento exitoso"
+				message="Usuario registrado con exito"></Modal>
 		</MainLayout>
 	);
 }

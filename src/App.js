@@ -8,6 +8,7 @@ import IndexPage from "./components/IndexPage";
 import { AdminAddResource } from "./components/pages/admin/AdminAddResource";
 import { AdminEditResource } from "./components/pages/admin/AdminEditResource";
 import { AdminGestionatePermisions } from "./components/pages/admin/AdminGestionatePermisions";
+import PasswordRecovery from "./components/pages/PasswordRecovery";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<IndexPage></IndexPage>}></Route>
 				<Route path="/login" element={<Login></Login>}></Route>
+				<Route path="/password-recovery" element={<PasswordRecovery></PasswordRecovery>}></Route>
 				<Route path="/register" element={<Register></Register>}></Route>
 				<Route
 					path="/add/:resource"

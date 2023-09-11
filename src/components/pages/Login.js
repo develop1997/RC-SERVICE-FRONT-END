@@ -154,6 +154,12 @@ function Login() {
 							¿Todavia no tienes cuenta?{" "}
 							<Link to="/register">Registrate</Link>
 						</p>
+
+						<p>
+							¿Olvidaste tu contraseña?{" "}
+							<Link to="/password-recovery">Recuperar contraseña</Link>
+						</p>
+
 						{iniciando ? <div className="spinner"></div> : <></>}
 						<input
 							type="submit"
