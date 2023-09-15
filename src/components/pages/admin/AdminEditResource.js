@@ -10,6 +10,8 @@ import "./AdminAddResource.css";
 import Select from "react-select";
 
 export function AdminEditResource() {
+	const [permisions, setpermisions] = useState([]);
+	const [selectedpermisions, setselectedpermisions] = useState([]);
 	let { resource, id } = useParams();
 	const [rol, setrol] = useState("");
 	const [roles, setroles] = useState([]);
@@ -24,6 +26,18 @@ export function AdminEditResource() {
 		nombreRol: "",
 		permiso: "",
 	});
+
+	useEffect(() => {
+		axios
+			.get(api + "/admin-rol/permisos")
+			.then((response) => {
+				setpermisions(response.data);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const [iniciando, setIniciando] = useState(false);
 	const [error, setError] = useState("");
@@ -80,7 +94,7 @@ export function AdminEditResource() {
 							rol: formdata.nombreRol,
 						})
 						.then((res) => {
-							navigate("/");
+							navigate("/admin/show/usuarios");
 						})
 						.catch((e) => {
 							setError(
@@ -97,9 +111,10 @@ export function AdminEditResource() {
 							rol: {
 								nombreRol: formdata.nombreRol,
 							},
+							permisions: selectedpermisions,
 						})
 						.then((res) => {
-							navigate("/");
+							navigate("/admin/show/roles");
 						})
 						.catch((e) => {
 							setError(
@@ -116,7 +131,7 @@ export function AdminEditResource() {
 							permiso: formdata.permiso,
 						})
 						.then((res) => {
-							navigate("/");
+							navigate("/admin/show/permisos");
 						})
 						.catch((e) => {
 							setError(
@@ -133,6 +148,8 @@ export function AdminEditResource() {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [iniciando]);
+
+	console.log(selectedpermisions)
 
 	useEffect(() => {
 		document.title = "Editar " + resource;
@@ -190,8 +207,13 @@ export function AdminEditResource() {
 					.then((response) => {
 						setformdata({
 							...formdata,
-							nombreRol: response.data.nombreRol,
+							nombreRol: response.data.rol.nombreRol,
 						});
+						setselectedpermisions(
+							response.data.permisos.map((p) => {
+								return p.id_permiso;
+							})
+						);
 					})
 					.catch((error) => {
 						console.error("Error:", error);
@@ -213,7 +235,6 @@ export function AdminEditResource() {
 			default:
 				break;
 		}
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -233,6 +254,15 @@ export function AdminEditResource() {
 				<section className="adding-resource">
 					{resource === "user" ? (
 						<>
+							<div className="horizontal-stack">
+								<button
+									className="add-btn page-button"
+									onClick={() => {
+										navigate("/admin/show/usuarios");
+									}}>
+									Atras
+								</button>
+							</div>
 							<form onSubmit={handleSubmit}>
 								{error !== "" ? (
 									<div className="input-field error">
@@ -318,6 +348,15 @@ export function AdminEditResource() {
 						</>
 					) : resource === "role" ? (
 						<>
+							<div className="horizontal-stack">
+								<button
+									className="add-btn page-button"
+									onClick={() => {
+										navigate("/admin/show/roles");
+									}}>
+									Atras
+								</button>
+							</div>
 							<form onSubmit={handleSubmit}>
 								{error !== "" ? (
 									<div className="input-field error">
@@ -344,6 +383,55 @@ export function AdminEditResource() {
 										}
 									/>
 								</div>
+								{permisions.map((permission) => {
+									const isChecked =
+										selectedpermisions.includes(
+											permission._id
+										);
+
+									const handlePermissionChange = (e) => {
+										if (isChecked) {
+											const updatedPermissions =
+												selectedpermisions.filter(
+													(id) =>
+														id !== permission._id
+												);
+											setselectedpermisions(
+												updatedPermissions
+											);
+										} else {
+											setselectedpermisions([
+												...selectedpermisions,
+												permission._id,
+											]);
+										}
+									};
+
+									return (
+										<div
+											className="checkbox-list-item"
+											key={permission._id}>
+											<label
+												htmlFor={
+													"permission" +
+													permission._id
+												}>
+												{permission.permiso}:
+											</label>
+											<input
+												type="checkbox"
+												id={
+													"permission" +
+													permission._id
+												}
+												checked={isChecked}
+												onChange={
+													handlePermissionChange
+												}
+											/>
+										</div>
+									);
+								})}
 								{iniciando ? (
 									<div className="spinner"></div>
 								) : (
@@ -358,6 +446,15 @@ export function AdminEditResource() {
 						</>
 					) : resource === "permision" ? (
 						<>
+							<div className="horizontal-stack">
+								<button
+									className="add-btn page-button"
+									onClick={() => {
+										navigate("/admin/show/permisos");
+									}}>
+									Atras
+								</button>
+							</div>
 							<form onSubmit={handleSubmit}>
 								{error !== "" ? (
 									<div className="input-field error">

@@ -51,13 +51,15 @@ table .custom-ul {
 }
 
 .table-scroll {
-    max-height: 400px;
+    min-height: 400px;
+    max-height: 800px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
     overflow-y: scroll;
+    transition: all 0.3s ease;
 }
 
 table {
@@ -191,7 +193,7 @@ td:hover .menu-emergente {
     background-color: black;
     color: white;
     border-color: transparent;
-    padding: 8px 30px;
+    padding: 5px 25px;
     display: flex;
     justify-content: center;
     align-items: center;

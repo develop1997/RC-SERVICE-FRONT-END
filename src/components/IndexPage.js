@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import axios from "axios";
-import { AdminIndex } from "./pages/admin/AdminIndex";
 import { UserIndex } from "./pages/user/UserIndex";
 import { getSesion } from "../utils/Functions";
+import { Navigate } from "react-router-dom";
 
 function IndexPage() {
 	const [sesion, setsesion] = useState(undefined);
@@ -39,7 +39,7 @@ function IndexPage() {
 	}
 
 	if (rol === rolAdmin) {
-		return <AdminIndex></AdminIndex>;
+		return <Navigate to="/admin/show/usuarios"></Navigate>;
 	} else {
 		return <UserIndex></UserIndex>;
 	}

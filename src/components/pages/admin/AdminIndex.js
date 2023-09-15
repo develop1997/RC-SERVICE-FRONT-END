@@ -4,15 +4,42 @@ import { useEffect, useState } from "react";
 import "./AdminIndex.css";
 import MainLayout from "../../../layouts/MainLayout";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import deleteIcn from "../../../assets/delete-icon.svg";
 import editIcn from "../../../assets/edit-icon.svg";
 import gestionateIcn from "../../../assets/gestionate-icon.svg";
 import ModalQuestion from "../../ModalQuestion";
+import { getSesion } from "../../../utils/Functions";
 
 export function AdminIndex() {
+	const [sesion, setsesion] = useState("nothing");
+	const [rol, setrol] = useState("");
+	let rolAdmin = process.env.REACT_APP_ADMIN_SESION_NAME;
+	let { table } = useParams();
 	const navigate = useNavigate();
-	const [selectedTable, setSelectedTable] = useState("usuarios");
+
+	useEffect(() => {
+		if (sesion === "nothing") {
+			setsesion(getSesion());
+		} else {
+			axios
+				.get(api + "/users/email/" + sesion)
+				.then((response) => {
+					setrol(response.data.rol.nombreRol);
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sesion]);
+
+	if (!["usuarios", "roles", "permisos"].includes(table)) {
+		navigate("/error");
+	}
+	const [selectedTable, setSelectedTable] = useState(
+		table ? table : "usuarios"
+	);
 	const [tabledata, settabledata] = useState([]);
 	const [decidiendo, setdecidiendo] = useState(undefined);
 	const [editingRow, setEditingRow] = useState(null);
@@ -95,167 +122,193 @@ export function AdminIndex() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [tabledata]);
 
-	return (
-		<>
+	if (sesion === "nothing" || rol === "") {
+		return (
 			<MainLayout>
-				<div className="table-container">
-					<ul className="table-header custom-ul">
-						<li>
+				<div className="spinner"></div>
+			</MainLayout>
+		);
+	}
+
+	if (!sesion) {
+		return <Navigate to="/"></Navigate>;
+	}
+
+	if (rol === rolAdmin) {
+		return (
+			<>
+				<MainLayout>
+					<div className="table-container">
+						<ul className="table-header custom-ul">
+							<li>
+								<button
+									onClick={() =>
+										handleButtonClick("usuarios")
+									}
+									className={
+										selectedTable === "usuarios"
+											? "selected"
+											: ""
+									}>
+									Usuarios
+								</button>
+							</li>
+							<li>
+								<button
+									onClick={() => handleButtonClick("roles")}
+									className={
+										selectedTable === "roles"
+											? "selected"
+											: ""
+									}>
+									Roles
+								</button>
+							</li>
+							<li>
+								<button
+									onClick={() =>
+										handleButtonClick("permisos")
+									}
+									className={
+										selectedTable === "permisos"
+											? "selected"
+											: ""
+									}>
+									Permisos
+								</button>
+							</li>
+						</ul>
+						<div className="add-btn-container">
 							<button
-								onClick={() => handleButtonClick("usuarios")}
-								className={
-									selectedTable === "usuarios"
-										? "selected"
-										: ""
-								}>
-								Usuarios
+								className="add-btn page-button"
+								onClick={handleAdd}>
+								<span className="add-icon"> </span>
+								Añadir
 							</button>
-						</li>
-						<li>
-							<button
-								onClick={() => handleButtonClick("roles")}
-								className={
-									selectedTable === "roles" ? "selected" : ""
-								}>
-								Roles
-							</button>
-						</li>
-						<li>
-							<button
-								onClick={() => handleButtonClick("permisos")}
-								className={
-									selectedTable === "permisos"
-										? "selected"
-										: ""
-								}>
-								Permisos
-							</button>
-						</li>
-					</ul>
-					<div className="add-btn-container">
-						<button
-							className="add-btn page-button"
-							onClick={handleAdd}>
-							<span className="add-icon"> </span>
-							Añadir
-						</button>
-					</div>
-					<div className="table-scroll">
-						{tabledata && tabledata.length > 0 ? (
-							<>
-								{selectedTable === "usuarios" && (
-									<>
-										<table>
-											<thead>
-												<tr>
-													<th>Correo</th>
-													<th>Rol</th>
-													<th>Accion</th>
-												</tr>
-											</thead>
-											<tbody>
-												{tabledata.map((user) => {
-													if (!user) {
-														return null;
-													}
-													return (
-														<tr key={user._id}>
-															<td>
-																{user.correo}
-															</td>
-															<td>
-																{user.rol
-																	.nombreRol
-																	? user.rol
-																			.nombreRol
-																	: ""}
-															</td>
-															<td>
-																<button
-																	className="options-btn"
-																	onClick={() =>
-																		handleEditClick(
-																			user._id
-																		)
-																	}></button>
-																{editingRow ===
-																	user._id && (
-																	<div className="menu-emergente">
-																		<ul className="custom-ul pop-menu">
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					setdecidiendo(
-																						user._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						deleteIcn
-																					}
-																					alt="x"
-																				/>
-																				Eliminar
-																			</li>
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					navigate(
-																						"/edit/user/" +
+						</div>
+						<div className="table-scroll">
+							{tabledata && tabledata.length > 0 ? (
+								<>
+									{selectedTable === "usuarios" && (
+										<>
+											<table>
+												<thead>
+													<tr>
+														<th>Correo</th>
+														<th>Rol</th>
+														<th>Accion</th>
+													</tr>
+												</thead>
+												<tbody>
+													{tabledata.map((user) => {
+														if (!user) {
+															return null;
+														}
+														return (
+															<tr key={user._id}>
+																<td>
+																	{
+																		user.correo
+																	}
+																</td>
+																<td>
+																	{user.rol? 
+																	user
+																				.rol
+																				.nombreRol
+																		: "Sin rol"}
+																</td>
+																<td>
+																	<button
+																		className="options-btn"
+																		onClick={() =>
+																			handleEditClick(
+																				user._id
+																			)
+																		}></button>
+																	{editingRow ===
+																		user._id && (
+																		<div className="menu-emergente">
+																			<ul className="custom-ul pop-menu">
+																				<li
+																					className="custom-li pop-menu-option"
+																					onClick={() => {
+																						setdecidiendo(
 																							user._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						editIcn
-																					}
-																					alt="x"
-																				/>
-																				Editar
-																			</li>
-																		</ul>
-																	</div>
-																)}
-															</td>
-														</tr>
-													);
-												})}
-											</tbody>
-										</table>
-									</>
-								)}
-								{selectedTable === "roles" && (
-									<>
-										<table>
-											<thead>
-												<tr>
-													<th>Nombre</th>
-													<th>Usuarios con el rol</th>
-													<th>Accion</th>
-												</tr>
-											</thead>
-											<tbody>
-												{tabledata.map((rol) => {
-													if (!rol.rol) {
-														return null;
-													}
-													return (
-														<tr key={rol.rol._id}>
-															<td>
-																{rol.rol
-																	.nombreRol
-																	? rol.rol
-																			.nombreRol
-																	: ""}
-															</td>
-															<td>
-																<ul className="custom-ul">
-																	{rol.usuarios.map(
-																		(
-																			dato
-																		) => {
-																			return (
-																				<>
+																						);
+																					}}>
+																					<img
+																						src={
+																							deleteIcn
+																						}
+																						alt="x"
+																					/>
+																					Eliminar
+																				</li>
+																				<li
+																					className="custom-li pop-menu-option"
+																					onClick={() => {
+																						navigate(
+																							"/edit/user/" +
+																								user._id
+																						);
+																					}}>
+																					<img
+																						src={
+																							editIcn
+																						}
+																						alt="x"
+																					/>
+																					Editar
+																				</li>
+																			</ul>
+																		</div>
+																	)}
+																</td>
+															</tr>
+														);
+													})}
+												</tbody>
+											</table>
+										</>
+									)}
+									{selectedTable === "roles" && (
+										<>
+											<table>
+												<thead>
+													<tr>
+														<th>Nombre</th>
+														<th>
+															Usuarios con el rol
+														</th>
+														<th>Accion</th>
+													</tr>
+												</thead>
+												<tbody>
+													{tabledata.map((rol) => {
+														if (!rol.rol) {
+															return null;
+														}
+														return (
+															<tr
+																key={
+																	rol.rol._id
+																}>
+																<td>
+																	{rol.rol
+																		.nombreRol
+																		? rol
+																				.rol
+																				.nombreRol
+																		: ""}
+																</td>
+																<td>
+																	<ul className="custom-ul">
+																		{rol.usuarios.map(
+																			(
+																				dato
+																			) => {
+																				return (
 																					<li
 																						className="custom-li"
 																						key={
@@ -265,248 +318,258 @@ export function AdminIndex() {
 																							dato.correo
 																						}
 																					</li>
-																				</>
-																			);
-																		}
-																	)}
-																</ul>
-															</td>
-															<td>
-																<button
-																	className="options-btn"
-																	onClick={() =>
-																		handleEditClick(
-																			rol
-																				.rol
-																				._id
-																		)
-																	}></button>
-																{editingRow ===
-																	rol.rol
-																		._id && (
-																	<div className="menu-emergente">
-																		<ul className="custom-ul pop-menu">
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					setdecidiendo(
-																						rol
-																							.rol
-																							._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						deleteIcn
-																					}
-																					alt="x"
-																				/>
-																				Eliminar
-																			</li>
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					navigate(
-																						"/edit/role/" +
+																				);
+																			}
+																		)}
+																	</ul>
+																</td>
+																<td>
+																	<button
+																		className="options-btn"
+																		onClick={() =>
+																			handleEditClick(
+																				rol
+																					.rol
+																					._id
+																			)
+																		}></button>
+																	{editingRow ===
+																		rol.rol
+																			._id && (
+																		<div className="menu-emergente">
+																			<ul className="custom-ul pop-menu">
+																				<li
+																					className="custom-li pop-menu-option"
+																					onClick={() => {
+																						setdecidiendo(
 																							rol
 																								.rol
 																								._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						editIcn
-																					}
-																					alt="x"
-																				/>
-																				Editar
-																			</li>
-																		</ul>
-																	</div>
-																)}
-															</td>
-														</tr>
-													);
-												})}
-											</tbody>
-										</table>
-									</>
-								)}
-								{selectedTable === "permisos" && (
-									<>
-										<table>
-											<thead>
-												<tr>
-													<th>Nombre</th>
-													<th>
-														Usuarios con el permiso
-													</th>
-													<th>Accion</th>
-												</tr>
-											</thead>
-											<tbody>
-												{tabledata.map((permiso) => {
-													if (!permiso.permiso) {
-														return null;
-													}
-													return (
-														<tr
-															key={
-																permiso.permiso
-																	._id
-															}>
-															<td>
-																{
-																	permiso
-																		.permiso
-																		.permiso
-																}
-															</td>
-															<td>
-																<ul className="custom-ul">
-																	{
+																						);
+																					}}>
+																					<img
+																						src={
+																							deleteIcn
+																						}
+																						alt="x"
+																					/>
+																					Eliminar
+																				</li>
+																				<li
+																					className="custom-li pop-menu-option"
+																					onClick={() => {
+																						navigate(
+																							"/edit/role/" +
+																								rol
+																									.rol
+																									._id
+																						);
+																					}}>
+																					<img
+																						src={
+																							editIcn
+																						}
+																						alt="x"
+																					/>
+																					Editar
+																				</li>
+																			</ul>
+																		</div>
+																	)}
+																</td>
+															</tr>
+														);
+													})}
+												</tbody>
+											</table>
+										</>
+									)}
+									{selectedTable === "permisos" && (
+										<>
+											<table>
+												<thead>
+													<tr>
+														<th>Nombre</th>
+														<th>
+															Usuarios con el
+															permiso
+														</th>
+														<th>Accion</th>
+													</tr>
+												</thead>
+												<tbody>
+													{tabledata.map(
+														(permiso) => {
+															if (
+																!permiso.permiso
+															) {
+																return null;
+															}
+															return (
+																<tr
+																	key={
 																		permiso
-																			.usuarios
-																			.length
-																	}{" "}
-																	Usuarios
-																</ul>
-															</td>
-															<td>
-																<button
-																	className="options-btn"
-																	onClick={() =>
-																		handleEditClick(
+																			.permiso
+																			._id
+																	}>
+																	<td>
+																		{
 																			permiso
 																				.permiso
-																				._id
-																		)
-																	}></button>
-																{editingRow ===
-																	permiso
-																		.permiso
-																		._id && (
-																	<div className="menu-emergente">
-																		<ul className="custom-ul pop-menu">
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					setdecidiendo(
-																						permiso
-																							.permiso
-																							._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						deleteIcn
-																					}
-																					alt="x"
-																				/>
-																				Eliminar
-																			</li>
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					navigate(
-																						"/edit/permision/" +
-																							permiso
-																								.permiso
-																								._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						editIcn
-																					}
-																					alt="x"
-																				/>
-																				Editar
-																			</li>
-																			<li
-																				className="custom-li pop-menu-option"
-																				onClick={() => {
-																					navigate(
-																						"/gestionate/permision/" +
-																							permiso
-																								.permiso
-																								._id
-																					);
-																				}}>
-																				<img
-																					src={
-																						gestionateIcn
-																					}
-																					alt="x"
-																				/>
-																				Gestionar
-																				Permisos
-																			</li>
+																				.permiso
+																		}
+																	</td>
+																	<td>
+																		<ul className="custom-ul">
+																			{
+																				permiso
+																					.usuarios
+																					.length
+																			}{" "}
+																			Usuarios
 																		</ul>
-																	</div>
-																)}
-															</td>
-														</tr>
-													);
-												})}
-											</tbody>
-										</table>
-									</>
-								)}
-							</>
-						) : (
-							<div className="spinner"></div>
-						)}
+																	</td>
+																	<td>
+																		<button
+																			className="options-btn"
+																			onClick={() =>
+																				handleEditClick(
+																					permiso
+																						.permiso
+																						._id
+																				)
+																			}></button>
+																		{editingRow ===
+																			permiso
+																				.permiso
+																				._id && (
+																			<div className="menu-emergente">
+																				<ul className="custom-ul pop-menu">
+																					<li
+																						className="custom-li pop-menu-option"
+																						onClick={() => {
+																							setdecidiendo(
+																								permiso
+																									.permiso
+																									._id
+																							);
+																						}}>
+																						<img
+																							src={
+																								deleteIcn
+																							}
+																							alt="x"
+																						/>
+																						Eliminar
+																					</li>
+																					<li
+																						className="custom-li pop-menu-option"
+																						onClick={() => {
+																							navigate(
+																								"/edit/permision/" +
+																									permiso
+																										.permiso
+																										._id
+																							);
+																						}}>
+																						<img
+																							src={
+																								editIcn
+																							}
+																							alt="x"
+																						/>
+																						Editar
+																					</li>
+																					<li
+																						className="custom-li pop-menu-option"
+																						onClick={() => {
+																							navigate(
+																								"/gestionate/permision/" +
+																									permiso
+																										.permiso
+																										._id
+																							);
+																						}}>
+																						<img
+																							src={
+																								gestionateIcn
+																							}
+																							alt="x"
+																						/>
+																						Gestionar
+																						Permisos
+																					</li>
+																				</ul>
+																			</div>
+																		)}
+																	</td>
+																</tr>
+															);
+														}
+													)}
+												</tbody>
+											</table>
+										</>
+									)}
+								</>
+							) : (
+								<div className="spinner"></div>
+							)}
+						</div>
 					</div>
-				</div>
-				<ModalQuestion
-					acceptText={"Eliminar"}
-					isOpen={decidiendo !== undefined}
-					message={
-						"Estas seguro/a de que quieres eliminar al usuario?"
-					}
-					onAccept={() => {
-						if (selectedTable === "usuarios") {
-							axios
-								.delete(api + "/users/" + decidiendo)
-								.then((response) => {
-									handleEditClick(decidiendo);
-									settabledata(undefined);
-								})
-								.catch((error) => {
-									console.error("Error:", error);
-								});
-						} else if (selectedTable === "roles") {
-							axios
-								.delete(api + "/admin-rol/role/" + decidiendo)
-								.then((response) => {
-									handleEditClick(decidiendo);
-									settabledata(undefined);
-								})
-								.catch((error) => {
-									console.error("Error:", error);
-								});
-						} else if (selectedTable === "permisos") {
-							axios
-								.delete(
-									api + "/admin-rol/permiso/" + decidiendo
-								)
-								.then((response) => {
-									handleEditClick(decidiendo);
-									settabledata(undefined);
-								})
-								.catch((error) => {
-									console.error("Error:", error);
-								});
+					<ModalQuestion
+						acceptText={"Eliminar"}
+						isOpen={decidiendo !== undefined}
+						message={
+							"Estas seguro/a de que quieres eliminar el elemento?"
 						}
-						setdecidiendo(undefined);
-					}}
-					onReject={() => {
-						setdecidiendo(undefined);
-					}}
-					rejectText={"Cancelar"}
-					title={"Eliminar Usuario"}></ModalQuestion>
-			</MainLayout>
-		</>
-	);
+						onAccept={() => {
+							if (selectedTable === "usuarios") {
+								axios
+									.delete(api + "/users/" + decidiendo)
+									.then((response) => {
+										handleEditClick(decidiendo);
+										settabledata(undefined);
+									})
+									.catch((error) => {
+										console.error("Error:", error);
+									});
+							} else if (selectedTable === "roles") {
+								axios
+									.delete(
+										api + "/admin-rol/role/" + decidiendo
+									)
+									.then((response) => {
+										handleEditClick(decidiendo);
+										settabledata(undefined);
+									})
+									.catch((error) => {
+										console.error("Error:", error);
+									});
+							} else if (selectedTable === "permisos") {
+								axios
+									.delete(
+										api + "/admin-rol/permiso/" + decidiendo
+									)
+									.then((response) => {
+										handleEditClick(decidiendo);
+										settabledata(undefined);
+									})
+									.catch((error) => {
+										console.error("Error:", error);
+									});
+							}
+							setdecidiendo(undefined);
+						}}
+						onReject={() => {
+							setdecidiendo(undefined);
+						}}
+						rejectText={"Cancelar"}
+						title={"Eliminar"}></ModalQuestion>
+				</MainLayout>
+			</>
+		);
+	} else {
+		return <Navigate to="/"></Navigate>;
+	}
 }

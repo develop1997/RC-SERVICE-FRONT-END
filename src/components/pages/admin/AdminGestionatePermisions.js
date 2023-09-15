@@ -123,8 +123,15 @@ export function AdminGestionatePermisions() {
 			<div className="table-container">
 				<h2>Usuarios con el Permiso</h2>
 				<div className="add-btn-container">
+					<button className="add-btn page-button"
+					onClick={()=>{
+						navigate("/admin/show/permisos")
+					}}
+					>
+						Atras
+					</button>
 					<Select
-						className="select-users"
+						className="select-users separate-select"
 						options={AllUsers}
 						onChange={(selectedOption) =>
 							setNuevoUsuario(selectedOption.value)

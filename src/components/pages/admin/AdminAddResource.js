@@ -79,7 +79,7 @@ export function AdminAddResource() {
 							contraseña: formdata.password,
 						})
 						.then((res) => {
-							navigate("/");
+							navigate("/admin/show/usuarios");
 						})
 						.catch((e) => {
 							setError(
@@ -99,7 +99,7 @@ export function AdminAddResource() {
 							permisions: selectedpermisions,
 						})
 						.then((res) => {
-							navigate("/");
+							navigate("/admin/show/roles");
 						})
 						.catch((e) => {
 							setError(
@@ -116,7 +116,7 @@ export function AdminAddResource() {
 							permiso: formdata.permiso,
 						})
 						.then((res) => {
-							navigate("/");
+							navigate("/admin/show/permisos");
 						})
 						.catch((e) => {
 							setError(
@@ -195,6 +195,15 @@ export function AdminAddResource() {
 				<section className="adding-resource">
 					{resource === "user" ? (
 						<>
+							<div className="horizontal-stack">
+								<button
+									className="add-btn page-button"
+									onClick={() => {
+										navigate("/admin/show/usuarios");
+									}}>
+									Atras
+								</button>
+							</div>
 							<form onSubmit={handleSubmit}>
 								{error !== "" ? (
 									<div className="input-field error">
@@ -276,6 +285,15 @@ export function AdminAddResource() {
 						</>
 					) : resource === "role" ? (
 						<>
+							<div className="horizontal-stack">
+								<button
+									className="add-btn page-button"
+									onClick={() => {
+										navigate("/admin/show/roles");
+									}}>
+									Atras
+								</button>
+							</div>
 							<form onSubmit={handleSubmit}>
 								{error !== "" ? (
 									<div className="input-field error">
@@ -369,6 +387,15 @@ export function AdminAddResource() {
 						</>
 					) : resource === "permision" ? (
 						<>
+							<div className="horizontal-stack">
+								<button
+									className="add-btn page-button"
+									onClick={() => {
+										navigate("/admin/show/permisos");
+									}}>
+									Atras
+								</button>
+							</div>
 							<form onSubmit={handleSubmit}>
 								{error !== "" ? (
 									<div className="input-field error">
